@@ -1,7 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, session, redirect, url_for
 from database.db import get_db, init_db, seed_db
 
 app = Flask(__name__)
+app.secret_key = "dev-secret"
 
 with app.app_context():
     init_db()
@@ -48,7 +49,41 @@ def logout():
 
 @app.route("/profile")
 def profile():
-    return "Profile page — coming in Step 4"
+    if not session.get("user_id"):
+        return redirect(url_for("login"))
+
+    user = {
+        "name": "Alex Johnson",
+        "email": "alex.johnson@example.com",
+        "initials": "AJ",
+        "member_since": "January 2024",
+    }
+    stats = {
+        "total_spent": "₹24,850",
+        "transaction_count": 12,
+        "top_category": "Food & Dining",
+    }
+    transactions = [
+        {"date": "2024-05-28", "description": "Swiggy Order",         "category": "Food & Dining",  "amount": "₹450"},
+        {"date": "2024-05-26", "description": "Monthly Rent",          "category": "Housing",        "amount": "₹12,000"},
+        {"date": "2024-05-24", "description": "Metro Card Recharge",   "category": "Transport",      "amount": "₹500"},
+        {"date": "2024-05-20", "description": "Groceries — DMart",     "category": "Food & Dining",  "amount": "₹1,850"},
+        {"date": "2024-05-15", "description": "Netflix Subscription",  "category": "Entertainment",  "amount": "₹649"},
+    ]
+    categories = [
+        {"name": "Housing",       "amount": "₹12,000", "pct": 48},
+        {"name": "Food & Dining", "amount": "₹6,300",  "pct": 25},
+        {"name": "Transport",     "amount": "₹2,500",  "pct": 10},
+        {"name": "Entertainment", "amount": "₹1,800",  "pct": 7},
+        {"name": "Other",         "amount": "₹2,250",  "pct": 10},
+    ]
+    return render_template(
+        "profile.html",
+        user=user,
+        stats=stats,
+        transactions=transactions,
+        categories=categories,
+    )
 
 
 @app.route("/expenses/add")

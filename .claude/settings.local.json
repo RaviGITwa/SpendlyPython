@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(..\\\\venv\\\\Scripts\\\\python.exe -c \"from database.db import init_db, seed_db, get_db; init_db\\(\\); seed_db\\(\\); conn = get_db\\(\\); print\\('users:', conn.execute\\('SELECT COUNT\\(*\\) FROM users'\\).fetchone\\(\\)[0]\\); print\\('expenses:', conn.execute\\('SELECT COUNT\\(*\\) FROM expenses'\\).fetchone\\(\\)[0]\\); seed_db\\(\\); print\\('after 2nd seed - expenses:', conn.execute\\('SELECT COUNT\\(*\\) FROM expenses'\\).fetchone\\(\\)[0]\\)\")"
+    ]
+  }
+}
